@@ -28,13 +28,22 @@ public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
 
-    @GetMapping("/user")
+    @GetMapping("/user/{uuid}")
     @ApiOperation("Get user by id")
-    public ResponseEntity<User> getUser(@RequestParam("uuid") UUID uuid) {
+    public ResponseEntity<UserDto> getUser(@PathVariable("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
-            return new ResponseEntity<>(userService.getUserFromCriteria(uuid), HttpStatus.OK);
+            User user = userService.getUserFromCriteria(uuid);
+            return Optional.ofNullable(user)
+                    .map(userD -> mapper.mapUserToUserDto(user))
+                    .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
+                    .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
+
         }
-        return new ResponseEntity<>(userService.getUserById(uuid), HttpStatus.OK);
+        User user = userService.getUserById(uuid);
+        return Optional.ofNullable(user)
+                .map(userD -> mapper.mapUserToUserDto(user))
+                .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
+                .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
     }
 
     @GetMapping("/users")
@@ -50,12 +59,19 @@ public class UserController {
 
     @PostMapping("/user")
     @ApiOperation("Add user")
-    public ResponseEntity<User> addUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
         User user = mapper.mapUserDtoToUser(userDto);
         return Optional.ofNullable(user)
                 .map(userService::saveUser)
-                .map(userSaved -> new ResponseEntity<>(userSaved, HttpStatus.OK))
+                .map(userSaved -> new ResponseEntity<>(userDto, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user not saved"));
+    }
+
+    @DeleteMapping("user/{uuid}")
+    @ApiOperation("Delete user by id")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("uuid") UUID uuid) {
+        userService.deleteUser(uuid);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

@@ -42,4 +42,8 @@ public class UserService {
         TypedQuery<User> query1 = entityManager.createQuery(query);
         return query1.getSingleResult();
     }
+
+    public void deleteUser(UUID uuid) {
+        userRepository.deleteById(uuid);
+    }
 }
