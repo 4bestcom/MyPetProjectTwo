@@ -1,5 +1,6 @@
 package com.hibernatetest.lesson.enity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Table(name = "users")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ApiModel
 public class User {
     @Id
     @Column(name = "user_id")

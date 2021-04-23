@@ -6,6 +6,8 @@ import com.hibernatetest.lesson.exceptions.MyCustomException;
 import com.hibernatetest.lesson.mapper.UserMapper;
 import com.hibernatetest.lesson.service.UserService;
 import com.hibernatetest.lesson.web.entity.UserDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,14 @@ import static java.util.function.Predicate.not;
 
 @RestController
 @RequiredArgsConstructor
+@Api(value = "Operations")
 public class UserController {
 
     private final UserService userService;
     private final UserMapper mapper;
 
     @GetMapping("/user")
+    @ApiOperation("Get user by id")
     public ResponseEntity<User> getUser(@RequestParam("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
             return new ResponseEntity<>(userService.getUserFromCriteria(uuid), HttpStatus.OK);
@@ -34,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @ApiOperation("Get all users")
     public ResponseEntity<List<UserDto>> getUsers() {
         List<User> allUsers = userService.getAllUsers();
         return Optional.ofNullable(allUsers)
@@ -44,21 +49,13 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<User> addUser(@RequestParam("passport") String passportNumber, @RequestParam("name") String name) {
-        User user = new User();
-        user.setPassportNumber(passportNumber);
-        user.setFirstName(name);
-        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
-    }
-
-    @PostMapping("/user_dto")
-    public ResponseEntity<User> addUserDto(@RequestBody UserDto userDto) {
+    @ApiOperation("Add user")
+    public ResponseEntity<User> addUser(@RequestBody UserDto userDto) {
         User user = mapper.mapUserDtoToUser(userDto);
         return Optional.ofNullable(user)
                 .map(userService::saveUser)
                 .map(userSaved -> new ResponseEntity<>(userSaved, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user not saved"));
     }
-
 }
 

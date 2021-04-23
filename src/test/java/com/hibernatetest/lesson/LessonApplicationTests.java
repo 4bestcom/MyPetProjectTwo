@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.swing.text.html.parser.Entity;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
