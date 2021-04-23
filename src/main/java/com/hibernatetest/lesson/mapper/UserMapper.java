@@ -3,6 +3,8 @@ package com.hibernatetest.lesson.mapper;
 import com.hibernatetest.lesson.enity.User;
 import com.hibernatetest.lesson.web.entity.UserDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -15,8 +17,6 @@ public interface UserMapper {
 
     List<UserDto> mapListUserToListUserDto(List<User> users);
 
-    //используется ко всем найденным типам при маппинге, т.е. к каждому стрингу
-//    default String mapName(String name) {
-//        return name + " testMapping";
-//    }
+    @Mapping(target = "id", ignore = true)
+    void copyUser(@MappingTarget User user, UserDto userDto);
 }

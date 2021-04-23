@@ -23,7 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User saveUser(User user) {
-        return Optional.of(userRepository.save(user)).orElseThrow();
+        return Optional.of(userRepository.saveAndFlush(user)).orElseThrow();
     }
 
     public List<User> getAllUsers() {
