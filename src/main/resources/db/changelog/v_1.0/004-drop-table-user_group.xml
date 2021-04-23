@@ -6,9 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
          http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
 
-    <include file="v_1.0/001-create_table_users.xml" relativeToChangelogFile="true" />
-    <include file="v_1.0/002-add-column-users.xml" relativeToChangelogFile="true" />
-    <include file="v_1.0/003-add-table_users_group.xml" relativeToChangelogFile="true" />
-    <include file="v_1.0/004-drop-table-user_group.xml" relativeToChangelogFile="true" />
-
+    <changeSet id="001-drop-table-users-group" author="rbogatyrev">
+        <dropTable tableName="users_group" cascadeConstraints="true"/>
+    </changeSet>
 </databaseChangeLog>
