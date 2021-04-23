@@ -1,0 +1,44 @@
+{
+  "coord": {
+    "lon": 53.2333,
+    "lat": 56.85
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 280.93,
+    "feels_like": 279.21,
+    "temp_min": 280.93,
+    "temp_max": 280.93,
+    "pressure": 1020,
+    "humidity": 49
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 2.68,
+    "deg": 46,
+    "gust": 5.81
+  },
+  "clouds": {
+    "all": 7
+  },
+  "dt": 1618721954,
+  "sys": {
+    "type": 3,
+    "id": 2003018,
+    "country": "RU",
+    "sunrise": 1618708288,
+    "sunset": 1618760456
+  },
+  "timezone": 14400,
+  "id": 554840,
+  "name": "Izhevsk",
+  "cod": 200
+}
