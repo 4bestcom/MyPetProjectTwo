@@ -9,8 +9,6 @@ import com.hibernatetest.lesson.web.entity.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +24,6 @@ import static java.util.function.Predicate.not;
 @RequiredArgsConstructor
 @Api(value = "Operations")
 public class UserController {
-    Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     private final UserMapper userMapper;
