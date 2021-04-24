@@ -32,16 +32,14 @@ public class UserController {
     @ApiOperation("Get user by id")
     public ResponseEntity<UserDto> getUser(@PathVariable("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
-            User user = userService.getUserFromCriteria(uuid);
-            return Optional.ofNullable(user)
-                    .map(userD -> userMapper.mapUserToUserDto(user))
+            return userService.getUserFromCriteria(uuid)
+                    .map(userMapper::mapUserToUserDto)
                     .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                     .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
 
         }
-        User user = userService.getUserById(uuid);
-        return Optional.ofNullable(user)
-                .map(userD -> userMapper.mapUserToUserDto(user))
+        return userService.getUserById(uuid)
+                .map(userMapper::mapUserToUserDto)
                 .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
     }
@@ -61,26 +59,26 @@ public class UserController {
     @ApiOperation("Add user")
     public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
         User user = userMapper.mapUserDtoToUser(userDto);
-        return Optional.ofNullable(user)
-                .map(userService::saveUser)
-                .map(userSaved -> new ResponseEntity<>(userDto, HttpStatus.OK))
+        return userService.saveUser(user)
+                .map(userMapper::mapUserToUserDto)
+                .map(userSaved -> new ResponseEntity<>(userSaved, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user not saved"));
     }
 
     @DeleteMapping("/user/{uuid}")
     @ApiOperation("Delete user by id")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<String> deleteUser(@PathVariable("uuid") UUID uuid) {
         userService.deleteUser(uuid);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
     @PutMapping("/user")
     @ApiOperation("Update user by id")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        User user = userService.getUserById(userDto.getId());
-        if (user != null) {
-            userMapper.copyUser(user, userDto);
-            userService.saveUser(user);
+        Optional<User> user = userService.getUserById(userDto.getId());
+        if (user.isPresent()) {
+            userMapper.copyUser(user.get(), userDto);
+            userService.saveUser(user.get());
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

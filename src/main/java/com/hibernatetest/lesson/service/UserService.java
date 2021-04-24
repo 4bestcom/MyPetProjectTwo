@@ -22,25 +22,25 @@ public class UserService {
     private final EntityManager entityManager;
     private final UserRepository userRepository;
 
-    public User saveUser(User user) {
-        return Optional.of(userRepository.saveAndFlush(user)).orElseThrow();
+    public Optional<User> saveUser(User user) {
+        return Optional.of(userRepository.saveAndFlush(user));
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public User getUserById(UUID uuid) {
-        return userRepository.findById(uuid).orElseThrow();
+    public Optional<User> getUserById(UUID uuid) {
+        return userRepository.findById(uuid);
     }
 
-    public User getUserFromCriteria(UUID uuid) {
+    public Optional<User> getUserFromCriteria(UUID uuid) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
         Root<User> fromUser = query.from(User.class);
         query.select(fromUser).where(criteriaBuilder.equal(fromUser.get("id"), uuid));
         TypedQuery<User> query1 = entityManager.createQuery(query);
-        return query1.getSingleResult();
+        return Optional.of(query1.getSingleResult());
     }
 
     public void deleteUser(UUID uuid) {
