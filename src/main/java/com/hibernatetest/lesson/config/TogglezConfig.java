@@ -10,6 +10,7 @@ import org.togglz.core.user.UserProvider;
 
 @Component
 public class TogglezConfig {
+
     @Bean
     public Class<? extends Feature> getFeatureClass() {
         return FeatureToggles.class;
