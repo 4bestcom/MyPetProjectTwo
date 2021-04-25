@@ -3,6 +3,7 @@ package com.hibernatetest.lesson.web.entity;
 import lombok.Data;
 
 import java.util.UUID;
+
 @Data
 public class UserDto {
 
