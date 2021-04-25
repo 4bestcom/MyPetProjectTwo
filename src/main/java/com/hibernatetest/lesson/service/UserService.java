@@ -1,8 +1,10 @@
 package com.hibernatetest.lesson.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.exceptions.MyCustomException;
+import com.hibernatetest.lesson.mapper.UserMapper;
 import com.hibernatetest.lesson.repository.UserRepository;
+import com.hibernatetest.lesson.web.entity.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,15 @@ public class UserService {
 
     private final EntityManager entityManager;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public Optional<User> saveUser(User user) {
-        return Optional.of(userRepository.saveAndFlush(user));
+        Optional<User> byId = userRepository.findById(user.getId());
+        if (byId.isEmpty()) {
+            User userResult = userRepository.saveAndFlush(user);
+            return Optional.of(userResult);
+        }
+        throw new MyCustomException("the user already exists");
     }
 
     public List<User> getAllUsers() {
@@ -45,5 +53,14 @@ public class UserService {
 
     public void deleteUser(UUID uuid) {
         userRepository.deleteById(uuid);
+    }
+
+    public Optional<User> updatedUser(UserDto userDto) {
+        Optional<User> user = userRepository.findById(userDto.getId());
+        if (user.isPresent()) {
+            userMapper.copyUser(user.get(), userDto);
+            return Optional.of(userRepository.saveAndFlush(user.get()));
+        }
+        throw new MyCustomException("User id: " + userDto.getId() + " not found");
     }
 }
