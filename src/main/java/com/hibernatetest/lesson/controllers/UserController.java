@@ -3,8 +3,8 @@ package com.hibernatetest.lesson.controllers;
 import com.hibernatetest.lesson.enity.FeatureToggles;
 import com.hibernatetest.lesson.enity.User;
 import com.hibernatetest.lesson.exceptions.MyCustomException;
+import com.hibernatetest.lesson.service.UserService;
 import com.hibernatetest.lesson.web.mapper.UserDtoMapper;
-import com.hibernatetest.lesson.service.impl.UserServiceImpl;
 import com.hibernatetest.lesson.web.entity.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,20 +25,20 @@ import static java.util.function.Predicate.not;
 @Api(value = "Operations")
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private final UserDtoMapper userDtoMapper;
 
     @GetMapping("/user/{uuid}")
     @ApiOperation("Get user by id")
     public ResponseEntity<UserDto> getUser(@PathVariable("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
-            return userServiceImpl.getUserFromCriteria(uuid)
+            return userService.getUserFromCriteria(uuid)
                     .map(userDtoMapper::fromUser)
                     .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                     .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
 
         }
-        return userServiceImpl.getUserById(uuid)
+        return userService.getUserById(uuid)
                 .map(userDtoMapper::fromUser)
                 .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping("/users")
     @ApiOperation("Get all users")
     public ResponseEntity<List<UserDto>> getUsers() {
-        List<User> allUsers = userServiceImpl.getAllUsers();
+        List<User> allUsers = userService.getAllUsers();
         return Optional.ofNullable(allUsers)
                 .filter(not(List::isEmpty))
                 .map(userDtoMapper::mapListUserToListUserDto)
@@ -59,7 +59,7 @@ public class UserController {
     @ApiOperation("Add user")
     public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
         User user = userDtoMapper.toUser(userDto);
-        return userServiceImpl.saveUser(user)
+        return userService.saveUser(user)
                 .map(userDtoMapper::fromUser)
                 .map(userResultDto -> new ResponseEntity<>(userResultDto, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
@@ -68,14 +68,14 @@ public class UserController {
     @DeleteMapping("/user/{uuid}")
     @ApiOperation("Delete user by id")
     public ResponseEntity<String> deleteUser(@PathVariable("uuid") UUID uuid) {
-        userServiceImpl.deleteUser(uuid);
+        userService.deleteUser(uuid);
         return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
     @PutMapping("/user")
     @ApiOperation("Update user by id")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        Optional<User> user = userServiceImpl.updatedUser(userDto);
+        Optional<User> user = userService.updatedUser(userDto);
         return user
                 .map(userDtoMapper::fromUser)
                 .map(userDtoResult -> new ResponseEntity<>(userDtoResult, HttpStatus.OK))
