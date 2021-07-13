@@ -3,8 +3,8 @@ package com.hibernatetest.lesson.controllers;
 import com.hibernatetest.lesson.enity.FeatureToggles;
 import com.hibernatetest.lesson.enity.User;
 import com.hibernatetest.lesson.exceptions.MyCustomException;
-import com.hibernatetest.lesson.web.mapper.UserDtoMapper;
 import com.hibernatetest.lesson.service.UserService;
+import com.hibernatetest.lesson.web.mapper.UserDtoMapper;
 import com.hibernatetest.lesson.web.entity.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,13 +33,13 @@ public class UserController {
     public ResponseEntity<UserDto> getUser(@PathVariable("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
             return userService.getUserFromCriteria(uuid)
-                    .map(userDtoMapper::mapUserToUserDto)
+                    .map(userDtoMapper::fromUser)
                     .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                     .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
 
         }
         return userService.getUserById(uuid)
-                .map(userDtoMapper::mapUserToUserDto)
+                .map(userDtoMapper::fromUser)
                 .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
                 .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
     }
@@ -58,9 +58,9 @@ public class UserController {
     @PostMapping("/user")
     @ApiOperation("Add user")
     public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        User user = userDtoMapper.mapUserDtoToUser(userDto);
+        User user = userDtoMapper.toUser(userDto);
         return userService.saveUser(user)
-                .map(userDtoMapper::mapUserToUserDto)
+                .map(userDtoMapper::fromUser)
                 .map(userResultDto -> new ResponseEntity<>(userResultDto, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
@@ -77,7 +77,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
         Optional<User> user = userService.updatedUser(userDto);
         return user
-                .map(userDtoMapper::mapUserToUserDto)
+                .map(userDtoMapper::fromUser)
                 .map(userDtoResult -> new ResponseEntity<>(userDtoResult, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }

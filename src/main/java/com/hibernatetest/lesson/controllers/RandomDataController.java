@@ -4,7 +4,7 @@ package com.hibernatetest.lesson.controllers;
 import com.hibernatetest.lesson.GeneratorUsers;
 import com.hibernatetest.lesson.enity.User;
 import com.hibernatetest.lesson.exceptions.MyCustomException;
-import com.hibernatetest.lesson.service.UserService;
+import com.hibernatetest.lesson.service.impl.UserServiceImpl;
 import com.hibernatetest.lesson.web.client.WeatherClient;
 import com.hibernatetest.lesson.web.entity.weather.WeatherDto;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController()
 @RequestMapping("random")
 public class RandomDataController {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final WeatherClient weatherClient;
 
 
@@ -29,7 +29,7 @@ public class RandomDataController {
     public void addRandomUsers() throws IOException {
         for (int i = 0; i < 5; i++) {
             User user = GeneratorUsers.createUser();
-            userService.saveUser(user);
+            userServiceImpl.saveUser(user);
         }
     }
 
