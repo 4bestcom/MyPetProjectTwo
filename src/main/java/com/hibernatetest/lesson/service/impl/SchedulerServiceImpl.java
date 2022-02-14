@@ -4,6 +4,7 @@ import com.hibernatetest.lesson.service.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     private String url;
 
     @Override
-    @Scheduled(fixedDelay = 3000000)
+    @Async
+    @Scheduled(fixedDelay = 2800000)
     public void sendRequest() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest builder = HttpRequest.newBuilder()
@@ -32,7 +34,7 @@ public class SchedulerServiceImpl implements SchedulerService {
                 .build();
         CompletableFuture<HttpResponse<String>> httpResponseCompletableFuture = client.sendAsync(builder, HttpResponse.BodyHandlers.ofString());
         try {
-            log.info("scheduler is completed {}", httpResponseCompletableFuture.get().body());
+            log.info("scheduler is completed, code: {}", httpResponseCompletableFuture.get().statusCode());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
