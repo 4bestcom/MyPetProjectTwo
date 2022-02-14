@@ -1,6 +1,6 @@
 package com.hibernatetest.lesson.service;
 
-import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.entity.User;
 import com.hibernatetest.lesson.web.entity.UserDto;
 
 import java.util.List;
@@ -14,8 +14,6 @@ public interface UserService {
     List<User> getAllUsers();
 
     Optional<User> getUserById(UUID uuid);
-
-    Optional<User> getUserFromCriteria(UUID uuid);
 
     void deleteUser(UUID uuid);
 

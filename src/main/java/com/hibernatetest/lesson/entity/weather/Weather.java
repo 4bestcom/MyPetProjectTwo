@@ -1,4 +1,4 @@
-package com.hibernatetest.lesson.enity.weather;
+package com.hibernatetest.lesson.entity.weather;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
