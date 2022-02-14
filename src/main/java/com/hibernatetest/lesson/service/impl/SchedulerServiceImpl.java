@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 @EnableScheduling
 public class SchedulerServiceImpl implements SchedulerService {
 
-    @Value("${service.constant.url}")
+    @Value("${scheduler.url}")
     private String url;
 
     @Override
@@ -35,9 +35,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         CompletableFuture<HttpResponse<String>> httpResponseCompletableFuture = client.sendAsync(builder, HttpResponse.BodyHandlers.ofString());
         try {
             log.info("scheduler is completed, code: {}", httpResponseCompletableFuture.get().statusCode());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }

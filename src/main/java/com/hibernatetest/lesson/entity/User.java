@@ -1,4 +1,4 @@
-package com.hibernatetest.lesson.enity;
+package com.hibernatetest.lesson.entity;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
