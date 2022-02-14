@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import java.io.IOException;
 
 @SpringBootApplication
-@EnableFeignClients
 @EnableAsync
 public class LessonApplication extends SpringBootServletInitializer {
 

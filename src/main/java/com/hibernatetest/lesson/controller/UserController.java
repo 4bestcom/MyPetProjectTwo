@@ -1,7 +1,7 @@
-package com.hibernatetest.lesson.controllers;
+package com.hibernatetest.lesson.controller;
 
-import com.hibernatetest.lesson.enity.FeatureToggles;
-import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.entity.FeatureToggles;
+import com.hibernatetest.lesson.entity.User;
 import com.hibernatetest.lesson.exceptions.MyCustomException;
 import com.hibernatetest.lesson.service.UserService;
 import com.hibernatetest.lesson.web.mapper.UserDtoMapper;
@@ -32,10 +32,7 @@ public class UserController {
     @ApiOperation("Get user by id")
     public ResponseEntity<UserDto> getUser(@PathVariable("uuid") UUID uuid) {
         if (FeatureToggles.OPTION_ONE.isActive()) {
-            return userService.getUserFromCriteria(uuid)
-                    .map(userDtoMapper::fromUser)
-                    .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
-                    .orElseThrow(() -> new MyCustomException("user id: " + uuid + " not found"));
+            return ResponseEntity.ok(new UserDto());
 
         }
         return userService.getUserById(uuid)

@@ -1,8 +1,8 @@
-package com.hibernatetest.lesson.controllers;
+package com.hibernatetest.lesson.controller;
 
 
 import com.hibernatetest.lesson.GeneratorUsers;
-import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.entity.User;
 import com.hibernatetest.lesson.exceptions.MyCustomException;
 import com.hibernatetest.lesson.service.impl.UserServiceImpl;
 import com.hibernatetest.lesson.web.client.WeatherClient;

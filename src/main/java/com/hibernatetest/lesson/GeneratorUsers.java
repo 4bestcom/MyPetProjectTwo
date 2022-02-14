@@ -1,9 +1,8 @@
 package com.hibernatetest.lesson;
 
-import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.entity.User;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

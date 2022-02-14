@@ -1,4 +1,4 @@
-package com.hibernatetest.lesson.enity;
+package com.hibernatetest.lesson.entity;
 
 import org.togglz.core.Feature;
 import org.togglz.core.annotation.Label;
