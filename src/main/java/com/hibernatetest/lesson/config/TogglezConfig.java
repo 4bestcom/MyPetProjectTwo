@@ -1,6 +1,6 @@
 package com.hibernatetest.lesson.config;
 
-import com.hibernatetest.lesson.enity.FeatureToggles;
+import com.hibernatetest.lesson.entity.FeatureToggles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.togglz.core.Feature;
@@ -19,11 +19,6 @@ public class TogglezConfig {
 
     @Bean
     public UserProvider getUserProvider() {
-        return new UserProvider() {
-            @Override
-            public FeatureUser getCurrentUser() {
-                return new SimpleFeatureUser("admin", true);
-            }
-        };
+        return () -> new SimpleFeatureUser("admin", true);
     }
 }

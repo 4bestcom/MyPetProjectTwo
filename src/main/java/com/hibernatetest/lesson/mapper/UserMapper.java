@@ -1,6 +1,6 @@
 package com.hibernatetest.lesson.mapper;
 
-import com.hibernatetest.lesson.enity.User;
+import com.hibernatetest.lesson.entity.User;
 import com.hibernatetest.lesson.web.entity.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
